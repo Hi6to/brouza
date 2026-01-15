@@ -1,39 +1,65 @@
-// 1. HTMLの要素を取得
+// 1. Firebaseの機能をネットから読み込む
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+// 2. あなたのFirebase設定（★ここを書き換えてください！）
+const firebaseConfig = {
+  apiKey: "AIzaSyCPu2xi_tQmBHOl9FZxu_q3sLoSfJj7Voc",
+  authDomain: "project01-1e217.firebaseapp.com",
+  projectId: "project01-1e217",
+  storageBucket: "project01-1e217.firebasestorage.app",
+  messagingSenderId: "438455079136",
+  appId: "1:438455079136:web:4865d0ec3ed299de0bc085"
+};
+
+// 3. Firebaseを起動
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 4. HTML要素の取得
 const taskInput = document.getElementById('taskInput');
 const addBtn = document.getElementById('addBtn');
 const taskList = document.getElementById('taskList');
 
-// 2. ページを開いた時に、保存されたデータを読み込む
-document.addEventListener('DOMContentLoaded', function() {
-    loadTasks();
+// 5. データベースの変更を監視する（リアルタイム更新！）
+// 「todos」という名前のコレクション（データのまとまり）を使います
+const q = query(collection(db, "todos"), orderBy("createdAt", "asc")); // 作成順に並べる
+
+onSnapshot(q, (snapshot) => {
+    // データベースに変更があるたびに、この中が実行されます
+    taskList.innerHTML = ''; // 一旦リストを空にする
+
+    snapshot.forEach((document) => {
+        const taskData = document.data(); // データの中身（テキストなど）
+        const taskId = document.id;       // データのID（削除に使う）
+        
+        // 画面に表示する関数を呼ぶ
+        renderTask(taskId, taskData.text);
+    });
 });
 
-// 3. 「追加」ボタンが押された時の処理
-addBtn.addEventListener('click', function() {
+// 6. 「追加」ボタンが押された時（クラウドに保存）
+addBtn.addEventListener('click', async function() {
     const taskText = taskInput.value;
+    if (taskText === '') return;
 
-    if (taskText === '') {
-        alert('タスクを入力してください！');
-        return;
+    // データベースに書き込む
+    try {
+        await addDoc(collection(db, "todos"), {
+            text: taskText,
+            createdAt: new Date() // 並び替え用に日時も保存
+        });
+        taskInput.value = ''; // 入力欄を空にする
+    } catch (e) {
+        console.error("エラー:", e);
+        alert("追加できませんでした");
     }
-
-    // タスクを追加する関数を呼び出す
-    addTaskToDOM(taskText);
-    
-    // データを保存する
-    saveTasks();
-
-    taskInput.value = '';
 });
 
-// --- 以下、新しく作った関数たち ---
-
-// 画面にタスクを表示する関数（作成と読み込みの両方で使うため共通化）
-function addTaskToDOM(text) {
+// 7. 画面に表示する関数
+function renderTask(id, text) {
     const li = document.createElement('li');
-
-    // ★重要：文字とボタンを分けるためにspanタグを使う
-    // （保存時にボタンの「削除」という文字まで保存しないようにするため）
+    
     const span = document.createElement('span');
     span.textContent = text;
     li.appendChild(span);
@@ -42,46 +68,12 @@ function addTaskToDOM(text) {
     deleteBtn.textContent = '削除';
     deleteBtn.classList.add('delete-btn');
 
-    deleteBtn.addEventListener('click', function() {
-        taskList.removeChild(li);
-        // 削除したあとに、保存し直す（データを更新）
-        saveTasks();
+    // 削除ボタンが押された時（クラウドから削除）
+    deleteBtn.addEventListener('click', async function() {
+        // IDを指定してデータベースから削除
+        await deleteDoc(doc(db, "todos", id));
     });
 
     li.appendChild(deleteBtn);
     taskList.appendChild(li);
-}
-
-// データをブラウザに保存する関数
-function saveTasks() {
-    const tasks = [];
-    // 現在リストにあるすべてのli要素を探す
-    const listItems = taskList.querySelectorAll('li');
-
-    // ひとつずつ文字を取り出して配列に入れる
-    listItems.forEach(function(item) {
-        // liの中のspanタグの文字だけを取得
-        const text = item.querySelector('span').textContent;
-        tasks.push(text);
-    });
-
-    // 配列を文字に変換(JSON)して、localStorageに保存
-    localStorage.setItem('todoList', JSON.stringify(tasks));
-}
-
-// データをブラウザから読み込む関数
-function loadTasks() {
-    // 保存されたデータを取得
-    const savedTasks = localStorage.getItem('todoList');
-
-    // もしデータがあれば
-    if (savedTasks) {
-        // 文字(JSON)を配列に戻す
-        const tasks = JSON.parse(savedTasks);
-        
-        // 配列の中身を順番に画面に追加していく
-        tasks.forEach(function(text) {
-            addTaskToDOM(text);
-        });
-    }
-}
+};

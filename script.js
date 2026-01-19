@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-// 2. あなたのFirebase設定（★ここを書き換えてください！）
+// 2. あなたのFirebase設定
 const firebaseConfig = {
   apiKey: "AIzaSyCPu2xi_tQmBHOl9FZxu_q3sLoSfJj7Voc",
   authDomain: "project01-1e217.firebaseapp.com",
@@ -17,39 +17,52 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // 4. HTML要素の取得
-const taskInput = document.getElementById('taskInput');
+const categorySelect = document.getElementById('categorySelect');
+const titleInput = document.getElementById('titleInput');
+const contentInput = document.getElementById('contentInput');
 const addBtn = document.getElementById('addBtn');
-const taskList = document.getElementById('taskList');
+const memoList = document.getElementById('memoList');
 
-// 5. データベースの変更を監視する（リアルタイム更新！）
-// 「todos」という名前のコレクション（データのまとまり）を使います
-const q = query(collection(db, "todos"), orderBy("createdAt", "asc")); // 作成順に並べる
+// 5. データベースの変更を監視する
+// 「memos」という新しいコレクション名に変更しました（既存のToDoと分けるため）
+// orderBy("createdAt", "desc") → 作成日の「降順（新しい順）」に並べる設定です
+const q = query(collection(db, "memos"), orderBy("createdAt", "desc")); 
 
 onSnapshot(q, (snapshot) => {
-    // データベースに変更があるたびに、この中が実行されます
-    taskList.innerHTML = ''; // 一旦リストを空にする
+    memoList.innerHTML = ''; // 一旦リストを空にする
 
     snapshot.forEach((document) => {
-        const taskData = document.data(); // データの中身（テキストなど）
-        const taskId = document.id;       // データのID（削除に使う）
+        const data = document.data();
+        const id = document.id;
         
         // 画面に表示する関数を呼ぶ
-        renderTask(taskId, taskData.text);
+        renderMemo(id, data);
     });
 });
 
-// 6. 「追加」ボタンが押された時（クラウドに保存）
+// 6. 「記録する」ボタンが押された時
 addBtn.addEventListener('click', async function() {
-    const taskText = taskInput.value;
-    if (taskText === '') return;
+    const category = categorySelect.value;
+    const title = titleInput.value;
+    const content = contentInput.value;
+
+    if (title === '' && content === '') {
+        alert("タイトルか内容を入力してください");
+        return;
+    }
 
     // データベースに書き込む
     try {
-        await addDoc(collection(db, "todos"), {
-            text: taskText,
-            createdAt: new Date() // 並び替え用に日時も保存
+        await addDoc(collection(db, "memos"), {
+            category: category,
+            title: title,
+            content: content,
+            createdAt: new Date()
         });
-        taskInput.value = ''; // 入力欄を空にする
+        
+        // 入力欄をクリア
+        titleInput.value = '';
+        contentInput.value = '';
     } catch (e) {
         console.error("エラー:", e);
         alert("追加できませんでした");
@@ -57,23 +70,49 @@ addBtn.addEventListener('click', async function() {
 });
 
 // 7. 画面に表示する関数
-function renderTask(id, text) {
-    const li = document.createElement('li');
-    
-    const span = document.createElement('span');
-    span.textContent = text;
-    li.appendChild(span);
+function renderMemo(id, data) {
+    // カテゴリ表示用のラベル設定
+    let categoryLabel = "その他";
+    if (data.category === "music") categoryLabel = "🎵 作曲";
+    if (data.category === "art") categoryLabel = "🎨 イラスト";
 
+    const div = document.createElement('div');
+    // CSSで色分けするためにクラスを追加 (category-musicなど)
+    div.classList.add('memo-card', `category-${data.category}`);
+
+    div.innerHTML = `
+        <div class="memo-header">
+            <span class="memo-category">${categoryLabel}</span>
+            <span class="memo-title">${escapeHTML(data.title)}</span>
+        </div>
+        <div class="memo-content">${escapeHTML(data.content)}</div>
+    `;
+
+    // 削除ボタン
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = '削除';
     deleteBtn.classList.add('delete-btn');
-
-    // 削除ボタンが押された時（クラウドから削除）
     deleteBtn.addEventListener('click', async function() {
-        // IDを指定してデータベースから削除
-        await deleteDoc(doc(db, "todos", id));
+        if(confirm("このメモを削除しますか？")) {
+            await deleteDoc(doc(db, "memos", id));
+        }
     });
 
-    li.appendChild(deleteBtn);
-    taskList.appendChild(li);
+    div.appendChild(deleteBtn);
+    memoList.appendChild(div);
 };
+
+// セキュリティ対策：HTMLタグを無効化する関数
+function escapeHTML(str) {
+    if (!str) return ""; // 空の場合は空文字を返す
+    return str.replace(/[&<>"']/g, function(match) {
+        const escape = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        };
+        return escape[match];
+    });
+}

@@ -3,28 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDoアプリ</title>
-    <!-- CSSファイルを読み込む -->
+    <title>クリエイター学習メモ</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
-        <h1>ToDoリスト</h1>
+        <h1>学習メモ</h1>
         
-        <!-- タスクを入力するエリア -->
+        <!-- 入力エリア -->
         <div class="input-area">
-            <input type="text" id="taskInput" placeholder="タスクを入力...">
-            <button id="addBtn">追加</button>
+            <div class="input-row">
+                <select id="categorySelect">
+                    <option value="music">🎵 作曲</option>
+                    <option value="art">🎨 イラスト</option>
+                    <option value="other">📝 その他</option>
+                </select>
+                <input type="text" id="titleInput" placeholder="タイトル（例: コード進行について）">
+            </div>
+            <textarea id="contentInput" placeholder="学んだことや気づきをここに記入..."></textarea>
+            <button id="addBtn">記録する</button>
         </div>
 
-        <!-- タスクが表示されるリスト -->
-        <ul id="taskList">
-            <!-- ここにJavaScriptでリストが追加されます -->
-        </ul>
+        <!-- メモが表示されるリスト -->
+        <div id="memoList">
+            <!-- ここにJavaScriptでメモが追加されます -->
+        </div>
     </div>
 
-    <!-- JavaScriptファイルを読み込む -->
     <script type="module" src="script.js"></script>
 </body>
 </html>

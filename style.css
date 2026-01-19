@@ -1,67 +1,150 @@
 body {
-    font-family: sans-serif;
-    background-color: #f4f4f4;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background-color: #f0f2f5;
     display: flex;
     justify-content: center;
-    padding-top: 50px;
+    padding-top: 30px;
+    padding-bottom: 50px;
+    color: #333;
 }
 
 .container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 300px;
+    width: 90%;
+    max-width: 600px; /* 幅を広げました */
+    margin: 0 auto;
 }
 
 h1 {
     text-align: center;
-    color: #333;
-}
-
-.input-area {
-    display: flex;
-    gap: 10px;
+    color: #444;
     margin-bottom: 20px;
 }
 
-input {
-    flex: 1;
-    padding: 8px;
+/* 入力エリアのデザイン */
+.input-area {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-row {
+    display: flex;
+    gap: 10px;
+}
+
+select {
+    padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 6px;
+    background: #f9f9f9;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    resize: vertical; /* 縦方向のみリサイズ可 */
+    box-sizing: border-box;
 }
 
 button {
-    padding: 8px 15px;
-    background-color: #28a745;
+    padding: 12px;
+    background-color: #4A90E2;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-weight: bold;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
 button:hover {
-    background-color: #218838;
+    background-color: #357ABD;
 }
 
-ul {
-    list-style: none; /* 点を消す */
-    padding: 0;
+/* メモリストのデザイン */
+#memoList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-li {
-    background: #fff;
-    border-bottom: 1px solid #eee;
-    padding: 10px;
+.memo-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    position: relative;
+    border-left: 5px solid #ccc; /* デフォルトの色 */
+}
+
+/* カテゴリ別の色分け */
+.memo-card.category-music { border-left-color: #FF6B6B; } /* 赤系 */
+.memo-card.category-art { border-left-color: #4ECDC4; }   /* 青緑系 */
+.memo-card.category-other { border-left-color: #FFD166; } /* 黄色系 */
+
+.memo-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.memo-category {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #eee;
+    color: #555;
+}
+
+.memo-title {
+    font-weight: bold;
+    font-size: 18px;
+    flex: 1;
+    margin-left: 10px;
+}
+
+.memo-content {
+    white-space: pre-wrap; /* 改行を反映させる */
+    line-height: 1.6;
+    font-size: 14px;
+    color: #555;
 }
 
 .delete-btn {
-    background-color: #dc3545;
-    margin-left: 10px;
+    background-color: transparent;
+    color: #999;
+    border: 1px solid #ddd;
     padding: 4px 8px;
     font-size: 12px;
+    border-radius: 4px;
+    margin-top: 10px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.delete-btn:hover {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
 }

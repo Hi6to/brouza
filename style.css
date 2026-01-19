@@ -1,150 +1,111 @@
 body {
     font-family: "Helvetica Neue", Arial, sans-serif;
     background-color: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    padding-top: 30px;
-    padding-bottom: 50px;
+    margin: 0;
+    padding: 0;
     color: #333;
 }
 
-.container {
-    width: 90%;
-    max-width: 600px; /* 幅を広げました */
-    margin: 0 auto;
-}
-
-h1 {
-    text-align: center;
-    color: #444;
-    margin-bottom: 20px;
-}
-
-/* 入力エリアのデザイン */
-.input-area {
-    background: white;
+/* ① ヘッダー */
+header {
+    background-color: #88B0C3; /* 画像っぽい水色 */
+    color: white;
     padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
+    text-align: center;
+}
+header h1 { margin: 0; font-size: 24px; }
+
+/* ② ナビゲーション */
+nav {
+    background-color: #C2D69B; /* 画像っぽい黄緑色 */
+    padding: 10px 0;
+}
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: center;
+    gap: 30px;
 }
-
-.input-row {
-    display: flex;
-    gap: 10px;
-}
-
-select {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background: #f9f9f9;
-}
-
-input[type="text"] {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-}
-
-textarea {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    resize: vertical; /* 縦方向のみリサイズ可 */
-    box-sizing: border-box;
-}
-
-button {
-    padding: 12px;
-    background-color: #4A90E2;
-    color: white;
-    border: none;
-    border-radius: 6px;
+nav li {
     font-weight: bold;
+    color: #444;
     cursor: pointer;
-    transition: background 0.3s;
 }
 
-button:hover {
-    background-color: #357ABD;
+/* レイアウトの枠組み */
+.container {
+    display: flex; /* 横並びにする魔法 */
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 0 20px;
+    gap: 20px;
+    align-items: flex-start; /* 上揃え */
 }
 
-/* メモリストのデザイン */
-#memoList {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+/* ③ コンテンツ（左側・メイン） */
+main {
+    flex: 2; /* 2:1の比率で広く取る */
+    background-color: #EFEF80; /* 画像っぽい黄色 */
+    padding: 30px;
+    border-radius: 8px;
+    min-height: 400px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.memo-card {
-    background: white;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    position: relative;
-    border-left: 5px solid #ccc; /* デフォルトの色 */
+/* ④ サイドバー（右側・リスト） */
+aside {
+    flex: 1; /* 狭く取る */
+    background-color: #AAB7D2; /* 画像っぽい青紫 */
+    padding: 20px;
+    border-radius: 8px;
+    min-height: 400px;
 }
 
-/* カテゴリ別の色分け */
-.memo-card.category-music { border-left-color: #FF6B6B; } /* 赤系 */
-.memo-card.category-art { border-left-color: #4ECDC4; }   /* 青緑系 */
-.memo-card.category-other { border-left-color: #FFD166; } /* 黄色系 */
+aside h3 {
+    margin-top: 0;
+    border-bottom: 2px solid white;
+    padding-bottom: 10px;
+    color: white;
+}
 
-.memo-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* サイドバーのアイテム */
+.sidebar-item {
+    background: rgba(255,255,255,0.8);
     margin-bottom: 10px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 8px;
-}
-
-.memo-category {
-    font-size: 12px;
-    font-weight: bold;
-    padding: 4px 8px;
+    padding: 10px;
     border-radius: 4px;
-    background: #eee;
-    color: #555;
-}
-
-.memo-title {
-    font-weight: bold;
-    font-size: 18px;
-    flex: 1;
-    margin-left: 10px;
-}
-
-.memo-content {
-    white-space: pre-wrap; /* 改行を反映させる */
-    line-height: 1.6;
-    font-size: 14px;
-    color: #555;
-}
-
-.delete-btn {
-    background-color: transparent;
-    color: #999;
-    border: 1px solid #ddd;
-    padding: 4px 8px;
-    font-size: 12px;
-    border-radius: 4px;
-    margin-top: 10px;
     cursor: pointer;
-    align-self: flex-end;
+    transition: 0.2s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
 }
 
-.delete-btn:hover {
-    background-color: #dc3545;
-    color: white;
-    border-color: #dc3545;
+.sidebar-item:hover {
+    background: white;
+    transform: translateX(5px); /* ホバーで少し右に動く */
+}
+
+.sidebar-item::before {
+    content: "▷";
+    margin-right: 8px;
+    color: #555;
+    font-size: 12px;
+}
+
+/* メイン表示エリアのデザイン */
+.main-date { font-size: 0.9em; color: #666; display: block; margin-bottom: 5px;}
+.main-category { 
+    display: inline-block; padding: 4px 8px; border-radius: 4px; 
+    background: white; font-weight: bold; font-size: 0.8em; margin-bottom: 15px;
+}
+.main-title { font-size: 2em; margin: 0 0 20px 0; color: #222; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 10px;}
+.main-body { white-space: pre-wrap; line-height: 1.8; font-size: 1.1em;}
+
+/* スマホ対応（画面が狭いときは縦並びに戻す） */
+@media (max-width: 768px) {
+    .container { flex-direction: column; }
+    main, aside { width: 100%; box-sizing: border-box;}
 }

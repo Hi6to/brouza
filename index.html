@@ -8,15 +8,34 @@
 </head>
 <body>
 
-    <div class="container">
+    <!-- ① ヘッダー -->
+    <header>
         <h1>学習メモ</h1>
-        
-        <!-- 閲覧専用なので入力エリアはありません -->
+    </header>
 
-        <!-- メモが表示されるリスト -->
-        <div id="memoList">
-            <p style="text-align:center; color:#666;">データを読み込み中...</p>
-        </div>
+    <!-- ② ナビゲーション（今回は飾りですが、将来カテゴリ検索などに使えます） -->
+    <nav>
+        <ul>
+            <li>ホーム</li>
+            <li>作曲</li>
+            <li>イラスト</li>
+            <li>その他</li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- ③ コンテンツ（選んだメモの中身がここにドーンと表示される） -->
+        <main id="mainContent">
+            <div class="placeholder-text">読み込み中...</div>
+        </main>
+
+        <!-- ④ サイドバー（過去の投稿リスト） -->
+        <aside>
+            <h3>過去の投稿</h3>
+            <div id="sidebarList">
+                <!-- ここにリストが並びます -->
+            </div>
+        </aside>
     </div>
 
     <script type="module" src="script.js"></script>

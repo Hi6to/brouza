@@ -158,12 +158,24 @@ try {
     console.error(e);
 }
 
+// displayMain 関数の中の label 設定部分を書き換え
 function displayMain(data) {
     if (!document.getElementById('mainContent')) return;
+
+    // ★ ここから変更
     let categoryLabel = "その他";
-    if (data.category === "music") categoryLabel = "🎵 作曲";
-    if (data.category === "art") categoryLabel = "🎨 イラスト";
-    
+    let badgeColor = "#95a5a6"; // デフォルト（グレー）
+
+    if (data.category === "music") {
+        categoryLabel = "🎵 作曲";
+        badgeColor = "#3498db"; // 青
+    }
+    if (data.category === "art") {
+        categoryLabel = "🎨 イラスト";
+        badgeColor = "#e91e63"; // ピンク
+    }
+    // ★ ここまで変更
+
     let dateStr = "";
     if (data.createdAt) {
         const d = data.createdAt.toDate();
@@ -172,12 +184,18 @@ function displayMain(data) {
 
     let imageHTML = "";
     if (data.imageUrl) {
-        imageHTML = `<img src="${data.imageUrl}" style="max-width:100%; border-radius:8px; margin-top:20px;">`;
+        imageHTML = `<img src="${data.imageUrl}" style="max-width:100%; border-radius:8px; margin-top:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">`;
     }
 
+    // HTML生成部分で style="..." を使って色を反映させる
     document.getElementById('mainContent').innerHTML = `
         <span class="main-date">${dateStr}</span>
-        <div class="main-category">${categoryLabel}</div>
+        
+        <!-- styleで背景色と文字色を指定 -->
+        <div class="main-category" style="background-color: ${badgeColor}; color: white;">
+            ${categoryLabel}
+        </div>
+
         <h2 class="main-title">${escapeHTML(data.title)}</h2>
         <div class="main-body">${escapeHTML(data.content)}</div>
         ${imageHTML}

@@ -158,42 +158,52 @@ try {
     console.error(e);
 }
 
-// displayMain 関数の中の label 設定部分を書き換え
+// displayMain 関数をこれに書き換え
 function displayMain(data) {
-    if (!document.getElementById('mainContent')) return;
+    const mainElement = document.getElementById('mainContent');
+    if (!mainElement) return;
 
-    // ★ ここから変更
+    // カテゴリごとの色設定
     let categoryLabel = "その他";
-    let badgeColor = "#95a5a6"; // デフォルト（グレー）
+    let themeColor = "#95a5a6"; // デフォルト（グレー）
 
     if (data.category === "music") {
         categoryLabel = "🎵 作曲";
-        badgeColor = "#3498db"; // 青
+        themeColor = "#3498db"; // 青
     }
     if (data.category === "art") {
         categoryLabel = "🎨 イラスト";
-        badgeColor = "#e91e63"; // ピンク
+        themeColor = "#e91e63"; // ピンク
     }
-    // ★ ここまで変更
+    if (data.category === "other") {
+        categoryLabel = "📝 その他";
+        themeColor = "#f1c40f"; // 黄色
+    }
 
+    // ★ ここがポイント：CSS変数(--accent-color)に色をセットする
+    // これで style.css の border-left の色が自動で変わります
+    mainElement.style.setProperty('--accent-color', themeColor);
+
+    // 日付の変換
     let dateStr = "";
     if (data.createdAt) {
         const d = data.createdAt.toDate();
         dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
     }
 
+    // 画像HTML
     let imageHTML = "";
     if (data.imageUrl) {
         imageHTML = `<img src="${data.imageUrl}" style="max-width:100%; border-radius:8px; margin-top:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">`;
     }
 
-    // HTML生成部分で style="..." を使って色を反映させる
-    document.getElementById('mainContent').innerHTML = `
-        <span class="main-date">${dateStr}</span>
-        
-        <!-- styleで背景色と文字色を指定 -->
-        <div class="main-category" style="background-color: ${badgeColor}; color: white;">
-            ${categoryLabel}
+    // ★ HTMLの構造を変更：日付とカテゴリを .post-header という箱で囲みました
+    mainElement.innerHTML = `
+        <div class="post-header">
+            <span class="main-date">${dateStr}</span>
+            <div class="main-category" style="background-color: ${themeColor}; color: white; align-self: flex-start;">
+                ${categoryLabel}
+            </div>
         </div>
 
         <h2 class="main-title">${escapeHTML(data.title)}</h2>

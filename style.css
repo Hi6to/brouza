@@ -89,37 +89,42 @@ nav li.active::after {
 main {
     flex: 2.5;
     background-color: #ffffff;
-    padding: 40px;
-    border-radius: 12px;
+    padding: 40px; /* 内側の余白 */
+    border-radius: 4px; /* 角を少しだけ丸く */
     min-height: 500px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     
-    /* ★以下3行を追加（背景画像を綺麗に閉じ込める設定） */
     position: relative; 
     overflow: hidden;
     z-index: 0;
+
+    /* ★ 左側の太い縦線を追加 */
+    /* var(--accent-color) はJSから色を受け取るための変数です */
+    border-left: 15px solid var(--accent-color, #ccc); 
 }
 
-/* ★ここから新しく追加：背景に花柄を入れる設定 */
+/* 背景の花柄設定（ここは前回のままです） */
 main::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* 文字の後ろ側に配置 */
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    background-image: url('https://frame-illust.com/fi/wp-content/uploads/2014/10/af8d71b3fbbc5cdffc3ab28b32062153.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: grayscale(100%);
+    opacity: 0.1;
+}
 
-    /* ▼ ここに画像のURLを入れます（仮でフリー素材の花を入れています） */
-    background-image: url('https://sozai-good.com/uploads/83352/83352_sample.png');
-    
-    background-size: cover;       /* 枠いっぱいに広げる */
-    background-position: center;  /* 中央に配置 */
-    background-repeat: no-repeat; /* 繰り返しなし */
-
-    /* ▼ 色と透明度の調整 */
-    filter: grayscale(100%); /* どんな画像もモノクロにする魔法 */
-    opacity: 0.2;            /* 透明度（0.1 = かなり薄く。0.2 = 少し濃く） */
+/* ★ 新しく追加：日付とカテゴリを囲むヘッダーエリア（横線用） */
+.post-header {
+    border-bottom: 5px solid var(--accent-color, #ccc); /* 下に横線 */
+    padding-bottom: 20px;       /* 線との距離 */
+    margin-bottom: 30px;        /* タイトルとの距離 */
+    display: flex;              /* 日付とタグを横並びにする微調整 */
+    flex-direction: column;     /* やっぱり縦並びに */
+    gap: 10px;
 }
 
 /* ④ サイドバー（右側・リスト）：メインより控えめに */

@@ -111,7 +111,7 @@ main::before {
     z-index: -1; /* 文字の後ろ側に配置 */
 
     /* ▼ ここに画像のURLを入れます（仮でフリー素材の花を入れています） */
-    background-image: url('https://images.unsplash.com/photo-1507921315809-7d0774643033?q=80&w=1000&auto=format&fit=crop');
+    background-image: url('https://sozai-good.com/uploads/83352/83352_sample.png');
     
     background-size: cover;       /* 枠いっぱいに広げる */
     background-position: center;  /* 中央に配置 */

@@ -1,25 +1,30 @@
+/* ページの余白を消して、ヘッダーをピッタリ上につける設定 */
 body {
     font-family: "Helvetica Neue", Arial, sans-serif;
     background-color: #f0f2f5;
-    margin: 0;
+    margin: 0; /* ★重要：これを0にしないと隙間ができます */
     padding: 0;
     color: #333;
 }
 
-/* ① ヘッダー */
 header {
-    background-color: #88B0C3; /* 画像っぽい水色 */
+    background-color: #88B0C3;
     color: white;
     padding: 20px;
     text-align: center;
+    width: 100%; /* 横幅いっぱいに */
 }
-header h1 { margin: 0; font-size: 24px; }
 
-/* ② ナビゲーション */
+header h1 { 
+    margin: 0; 
+    font-size: 24px; 
+}
+
 nav {
-    background-color: #C2D69B; /* 画像っぽい黄緑色 */
+    background-color: #C2D69B;
     padding: 10px 0;
 }
+
 nav ul {
     list-style: none;
     margin: 0;
@@ -28,36 +33,34 @@ nav ul {
     justify-content: center;
     gap: 30px;
 }
+
 nav li {
     font-weight: bold;
     color: #444;
     cursor: pointer;
 }
 
-/* レイアウトの枠組み */
 .container {
-    display: flex; /* 横並びにする魔法 */
+    display: flex;
     max-width: 1000px;
     margin: 20px auto;
     padding: 0 20px;
     gap: 20px;
-    align-items: flex-start; /* 上揃え */
+    align-items: flex-start;
 }
 
-/* ③ コンテンツ（左側・メイン） */
 main {
-    flex: 2; /* 2:1の比率で広く取る */
-    background-color: #EFEF80; /* 画像っぽい黄色 */
+    flex: 2;
+    background-color: #EFEF80;
     padding: 30px;
     border-radius: 8px;
     min-height: 400px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* ④ サイドバー（右側・リスト） */
 aside {
-    flex: 1; /* 狭く取る */
-    background-color: #AAB7D2; /* 画像っぽい青紫 */
+    flex: 1;
+    background-color: #AAB7D2;
     padding: 20px;
     border-radius: 8px;
     min-height: 400px;
@@ -70,7 +73,6 @@ aside h3 {
     color: white;
 }
 
-/* サイドバーのアイテム */
 .sidebar-item {
     background: rgba(255,255,255,0.8);
     margin-bottom: 10px;
@@ -85,7 +87,7 @@ aside h3 {
 
 .sidebar-item:hover {
     background: white;
-    transform: translateX(5px); /* ホバーで少し右に動く */
+    transform: translateX(5px);
 }
 
 .sidebar-item::before {
@@ -93,6 +95,12 @@ aside h3 {
     margin-right: 8px;
     color: #555;
     font-size: 12px;
+}
+
+/* 画面が狭い時の設定 */
+@media (max-width: 768px) {
+    .container { flex-direction: column; }
+    main, aside { width: 100%; box-sizing: border-box;}
 }
 
 /* メイン表示エリアのデザイン */
@@ -103,9 +111,3 @@ aside h3 {
 }
 .main-title { font-size: 2em; margin: 0 0 20px 0; color: #222; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 10px;}
 .main-body { white-space: pre-wrap; line-height: 1.8; font-size: 1.1em;}
-
-/* スマホ対応（画面が狭いときは縦並びに戻す） */
-@media (max-width: 768px) {
-    .container { flex-direction: column; }
-    main, aside { width: 100%; box-sizing: border-box;}
-}
